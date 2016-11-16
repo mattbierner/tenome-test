@@ -1,6 +1,7 @@
 <html>
+
 <!--
-    Uses different mjpeg stream for each eye.
+    Duplicates the same mjpeg stream across both eyes. Flips image instead of rotates
 -->
 <head>
     <title>My Eyes</title>
@@ -22,14 +23,14 @@
             width: 50%;
             display: block;
             float: left;
-            transform: scaleX(-1);
+            transform: scale(1, -1);
         }
     </style>
 
 </head>
 
 <body>
-    <img src="http://172.20.10.3:8080/?action=stream_1" />
+    <img src="http://172.20.10.3:8080/?action=stream_0" />
     <img src="http://172.20.10.3:8080/?action=stream_0" />
 </body>
 
