@@ -1,37 +1,73 @@
 <html>
-
-<!--
-    Duplicates the same mjpeg stream across both eyes.
--->
-<head>
+  <head>
     <title>My Eyes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-
+    
     <style>
-        html,
-        body {
+        html, body {
             height: 100%;
             min-height: 100%;
             width: 100%;
             margin: 0;
             overflow: hidden;
+            background: black;
         }
-        
-        img {
+    
+         canvas {
             height: 100%;
             max-height: 100%;
             width: 50%;
             display: block;
             float: left;
-            transform: rotate(180deg);
+            transform: scaleY(-1) scaleX(-1);
         }
     </style>
+    
+    </head>
+    <body>
+        <canvas></canvas>
+        <canvas></canvas>
+        <script>
+            function loadImage(url) {
+                let resolve;
+                let reject
+                const p = new Promise((res, rej) => {
+                    resolve = res
+                    reject = rej
+                })
 
-</head>
+                const img = new Image()
+                img.crossOrigin = 'anonymous'
+                img.onload = () => { resolve(img) }
+                img.onerror = () => { reject(img) }
+                img.src = url
+                return p
+            }
+            
+            loadImage("http://sourdough:1234/?action=stream_0").then(img => {
+              Array.prototype.forEach.call(
+                    document.getElementsByTagName('canvas'),
+                    canvas => {
+                        canvas.width = img.width
+                        canvas.height = img.height
+                    })
+                animate(img)
+            }, () => {
+                console.error('could not load image')
+            });
+            
+            function animate(image) {
+                requestAnimationFrame(() => animate(image))
 
-<body>
-    <img src="http://172.20.10.3:8080/?action=stream_0" />
-    <img src="http://172.20.10.3:8080/?action=stream_0" />
-</body>
-
+                Array.prototype.forEach.call(
+                    document.getElementsByTagName('canvas'),
+                    canvas => {
+                        const ctx = canvas.getContext('2d')
+                        ctx.drawImage(image, 0, 0, canvas.width,canvas.height)
+                        ctx.restore()
+                    })
+        }
+            
+        </script>
+    </body>
 </html>
