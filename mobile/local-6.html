@@ -19,7 +19,6 @@
             width: 50%;
             display: block;
             float: left;
-            transform: scaleY(-1) scaleX(-1);
         }
     </style>
     
@@ -44,7 +43,7 @@
                 return p
             }
             
-            loadImage("http://bran.local:1234/?action=stream_0").then(img => {
+            loadImage("http://172.20.10.6:1234/?action=stream_0").then(img => {
               Array.prototype.forEach.call(
                     document.getElementsByTagName('canvas'),
                     canvas => {
